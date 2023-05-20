@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon'
 import { ref, computed } from 'vue'
-import { type Post, today, thisWeek, thisMonth } from '../posts'
+import { type Post, today, thisWeek, thisMonth, type TimelinePost } from '../posts'
+import TimelineItem from './TimelineItem.vue'
 
 const periods = ['Today', 'This Week', 'This Month'] as const
 
@@ -13,34 +14,31 @@ function selectPeriod(period: Period) {
   selectedPeriod.value = period
 }
 
-const posts = computed(() => {
-  return [today, thisWeek, thisMonth].reduce(
-    (accumulator: { created: DateTime; id: string; title: string }[], post: Post) => {
-      if (post.created == null) {
-        return accumulator
-      }
+const posts = computed<TimelinePost[]>(() => {
+  return [today, thisWeek, thisMonth].reduce((accumulator: TimelinePost[], post: Post) => {
+    if (post.created == null) {
+      return accumulator
+    }
 
-      const transformedPost = {
-        ...post,
-        created: DateTime.fromISO(post.created)
-      }
+    const transformedPost = {
+      ...post,
+      created: DateTime.fromISO(post.created)
+    }
 
-      if (selectedPeriod.value === 'Today') {
-        if (transformedPost.created >= DateTime.now().minus({ day: 1 })) {
-          accumulator.push(transformedPost)
-        }
-      } else if (selectedPeriod.value === 'This Week') {
-        if (transformedPost.created >= DateTime.now().minus({ week: 1 })) {
-          accumulator.push(transformedPost)
-        }
-      } else {
+    if (selectedPeriod.value === 'Today') {
+      if (transformedPost.created >= DateTime.now().minus({ day: 1 })) {
         accumulator.push(transformedPost)
       }
+    } else if (selectedPeriod.value === 'This Week') {
+      if (transformedPost.created >= DateTime.now().minus({ week: 1 })) {
+        accumulator.push(transformedPost)
+      }
+    } else {
+      accumulator.push(transformedPost)
+    }
 
-      return accumulator
-    },
-    []
-  )
+    return accumulator
+  }, [])
 })
 </script>
 
@@ -57,9 +55,6 @@ const posts = computed(() => {
       </a>
     </span>
 
-    <a v-for="post of posts" :key="post.id" class="panel-block">
-      {{ post.title }}
-      {{ post.created.toFormat('d MMM') }}
-    </a>
+    <TimelineItem v-for="post of posts" :key="post.id" :post="post" />
   </nav>
 </template>
