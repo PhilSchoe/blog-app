@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon'
 import { ref, computed } from 'vue'
-import { type Post, today, thisWeek, thisMonth, type TimelinePost } from '../posts'
+import { type TimelinePost } from '../posts'
 import TimelineItem from './TimelineItem.vue'
 import { usePosts } from '@/stores/posts'
 
@@ -18,9 +18,11 @@ function selectPeriod(period: Period) {
 }
 
 const posts = computed<TimelinePost[]>(() => {
-  return [today, thisWeek, thisMonth].reduce((accumulator: TimelinePost[], post: Post) => {
-    if (post.created == null) {
-      return accumulator
+  return postsStore.ids.reduce((accumulator: TimelinePost[], id: string) => {
+    const post = postsStore.all.get(id)
+    
+    if (post == null || post.created == null) {
+      throw Error(`Post with id of ${id} was epexcted, but not found.`)
     }
 
     const transformedPost = {
@@ -46,8 +48,6 @@ const posts = computed<TimelinePost[]>(() => {
 </script>
 
 <template>
-  {{ postsStore.foo }}
-  <button @click="postsStore.updateFoo('bar')">Update</button>
   <nav class="is-primary panel">
     <span class="panel-tabs">
       <a
