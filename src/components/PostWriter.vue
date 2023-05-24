@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch, watchEffect } from 'vue'
 import type { TimelinePost } from '@/posts'
+import { marked } from 'marked'
 
 // props
 
@@ -12,7 +13,24 @@ const props = defineProps<{
 
 const title = ref(props.post.title)
 const content = ref(props.post.markdown)
+const html = ref('')
 const contentEditable = ref<HTMLDivElement>()
+
+/*
+watchEffect( () => {
+  marked.parse(content.value, (err, parseResult) => {
+    html.value = parseResult
+  })
+})
+*/
+
+watch(content, (newContent) => {
+    marked.parse(newContent, (err, parseResult) => {
+    html.value = parseResult
+  })
+}, {
+  immediate: true
+})
 
 // lifecycle hooks
 
@@ -47,6 +65,8 @@ function handleInput(): void {
     <div class="column">
       <div contenteditable ref="contentEditable" @input="handleInput" />
     </div>
-    <div class="column">{{ content }}</div>
+    <div class="column">
+      <div v-html="html" />
+    </div>
   </div>
 </template>
