@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, watchEffect } from 'vue'
 import type { TimelinePost } from '@/posts'
+import { useRouter } from 'vue-router'
 import { marked } from 'marked'
 import { markedHighlight } from 'marked-highlight'
 import highlightjs from 'highlight.js'
 import debounce from 'lodash/debounce'
+import { usePosts } from '../stores/posts'
 
 // props
 
@@ -18,6 +20,9 @@ const title = ref(props.post.title)
 const content = ref(props.post.markdown)
 const html = ref('')
 const contentEditable = ref<HTMLDivElement>()
+
+const posts = usePosts()
+const router = useRouter()
 
 /*
 watchEffect( () => {
@@ -67,6 +72,17 @@ function handleInput(): void {
   }
   content.value = contentEditable.value?.innerText
 }
+
+async function handleClick(): Promise<void> {
+  const newPost: TimelinePost = {
+    ...props.post,
+    title: title.value,
+    markdown: content.value,
+    html: html.value
+  }
+  await posts.createPost(newPost)
+  router.push("/")
+}
 </script>
 
 <template>
@@ -85,6 +101,14 @@ function handleInput(): void {
     </div>
     <div class="column">
       <div v-html="html" />
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column">
+      <button class="button is-primary is-pulled-right" @click.prevent="handleClick">
+        Save Post
+      </button>
     </div>
   </div>
 </template>
