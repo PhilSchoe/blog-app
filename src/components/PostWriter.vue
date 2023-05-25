@@ -4,6 +4,7 @@ import type { TimelinePost } from '@/posts'
 import { marked } from 'marked'
 import { markedHighlight } from 'marked-highlight'
 import highlightjs from 'highlight.js'
+import debounce from 'lodash/debounce'
 
 // props
 
@@ -33,16 +34,19 @@ marked.use(markedHighlight({
   }
 }));
 
-watch(content, (newContent) => {
-    html.value = marked.parse(newContent, 
-    {
+function parseHtml(markdown: string) {
+  html.value = marked.parse(markdown, {
       mangle: false,
       headerIds: false,
       gfm: true,
       breaks: true,
       async: false
-    })
-}, {
+  })
+}
+
+watch(content, debounce((newContent) => {
+  parseHtml(newContent)
+}, 250), {
   immediate: true
 })
 
