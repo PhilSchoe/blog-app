@@ -1,19 +1,22 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue'
 import Navbar from './components/Navbar.vue'
-import { useModal } from './composables/modal';
+import { useModal } from './composables/modal'
+import FormInput from './components/FormInput.vue'
 
 const modal = useModal()
 
-const modalStyle = computed( () => {
+const modalStyle = computed(() => {
   return {
     display: modal.show.value ? 'block' : 'none'
   }
 })
+
+const username = ref('')
 </script>
 
 <template>
-  <div class="modal" style="color: white;" :style="modalStyle">
+  <div class="modal" style="color: white" :style="modalStyle">
     <div class="modal-background">
       <div class="modal-content">
         <div id="modal"></div>
@@ -24,8 +27,10 @@ const modalStyle = computed( () => {
 
   <div class="section">
     <div class="container">
+      <FormInput name="Username" v-model="username" />
       <Navbar />
       <RouterView />
+      {{ username }}
     </div>
   </div>
 </template>
@@ -39,7 +44,12 @@ ul {
   list-style-position: inside !important;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-size: revert !important;
   margin: 10px 0 !important;
 }

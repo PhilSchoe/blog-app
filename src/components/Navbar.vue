@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useModal } from '../composables/modal';
+import { useModal } from '../composables/modal'
 
 const modal = useModal()
 </script>
@@ -14,7 +14,5 @@ const modal = useModal()
     </div>
   </div>
 
-  <Teleport to="#modal">
-    Content to be rendered.
-  </Teleport>
+  <Teleport to="#modal"> Content to be rendered. </Teleport>
 </template>
