@@ -12,13 +12,17 @@ export const useUsers = defineStore('users', {
 
   actions: {
     async authenticate() {
-      const res = await window.fetch('/api/current-user', {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      const result = await res.json()
-      this.currentUserId = result.id
+      try {
+        const res = await window.fetch('/api/current-user', {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        const result = await res.json()
+        this.currentUserId = result.id
+      } catch {
+        this.currentUserId = undefined
+      }
     },
     async createUser(newUser: NewUser) {
       const body = JSON.stringify(newUser)
@@ -28,6 +32,16 @@ export const useUsers = defineStore('users', {
           'Content-Type': 'application/json'
         },
         body
+      })
+      return this.authenticate()
+    },
+
+    async logout() {
+      await window.fetch('/api/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
       return this.authenticate()
     }

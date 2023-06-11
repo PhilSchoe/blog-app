@@ -11,8 +11,8 @@ const usersStore = useUsers()
   <div class="navbar">
     <div class="navbar-end">
       <div v-if="usersStore.currentUserId" class="buttons">
-        <button class="button" @click.prevent="modal.showModal()">New Post</button>
-        <RouterLink to="/posts/new" class="button">Log out</RouterLink>
+        <RouterLink to="/posts/new" class="button">New Post</RouterLink>
+        <button class="button" @click.prevent="usersStore.logout()">Log out</button>
       </div>
 
       <div v-else class="buttons">
