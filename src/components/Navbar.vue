@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useUsers } from '@/stores/users'
 import { useModal } from '../composables/modal'
-import SingupForm from './SingupForm.vue'
 
 const modal = useModal()
 const usersStore = useUsers()
@@ -16,13 +15,13 @@ const usersStore = useUsers()
       </div>
 
       <div v-else class="buttons">
-        <button class="button" @click.prevent="modal.showModal()">Sign Up</button>
-        <RouterLink to="/posts/new" class="button">Sign In</RouterLink>
+        <button class="button" @click.prevent="modal.showModal('signUp')">Sign Up</button>
+        <button class="button" @click.prevent="modal.showModal('signIn')">Sign In</button>
       </div>
     </div>
   </div>
 
   <Teleport to="#modal">
-    <SingupForm />
+    <component :is="modal.component.value" />
   </Teleport>
 </template>
