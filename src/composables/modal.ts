@@ -1,5 +1,5 @@
 import { ref, shallowRef } from 'vue'
-import SingupForm from '@/components/SingupForm.vue'
+import SingupForm from '@/components/SignupForm.vue'
 import TestComponent from '@/components/TestComponent.vue'
 
 const show = ref(false)

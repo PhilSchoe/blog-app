@@ -1,10 +1,12 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { computed, ref } from 'vue'
 import FormInput from './FormInput.vue'
 import { type NewUser } from '../users'
 import { validate, length, required } from '../validation'
-import { useUsers } from '../stores/users'
-import { useModal } from '../composables/modal'
+
+const emit = defineEmits<{
+  (event: 'submit', payload: NewUser): void
+}>()
 
 const username = ref('')
 const usernameStatus = computed(() => {
@@ -20,9 +22,6 @@ const isInvalid = computed(() => {
   return !usernameStatus.value.valid || !passwordStatus.value.valid
 })
 
-const usersStore = useUsers()
-const modal = useModal()
-
 async function handleSubmit() {
   if (isInvalid.value) {
     return
@@ -34,12 +33,10 @@ async function handleSubmit() {
   }
 
   try {
-    await usersStore.createUser(newUser)
+    emit('submit', newUser)
   } catch (e) {
     console.log(e)
   }
-
-  modal.hideModal()
 }
 </script>
 
