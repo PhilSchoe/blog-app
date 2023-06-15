@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, watchEffect } from 'vue'
-import type { TimelinePost } from '@/posts'
+import type { Post, TimelinePost } from '@/posts'
 import { useRouter } from 'vue-router'
 import { marked } from 'marked'
 import { markedHighlight } from 'marked-highlight'
@@ -11,7 +11,7 @@ import { usePosts } from '../stores/posts'
 // props
 
 const props = defineProps<{
-  post: TimelinePost
+  post: TimelinePost | Post
 }>()
 
 // variables
@@ -32,28 +32,34 @@ watchEffect( () => {
 })
 */
 
-marked.use(markedHighlight({
-  langPrefix: 'hljs language-',
-  highlight(code) {
-    return highlightjs.highlightAuto(code).value;
-  }
-}));
+marked.use(
+  markedHighlight({
+    langPrefix: 'hljs language-',
+    highlight(code) {
+      return highlightjs.highlightAuto(code).value
+    }
+  })
+)
 
 function parseHtml(markdown: string) {
   html.value = marked.parse(markdown, {
-      mangle: false,
-      headerIds: false,
-      gfm: true,
-      breaks: true,
-      async: false
+    mangle: false,
+    headerIds: false,
+    gfm: true,
+    breaks: true,
+    async: false
   })
 }
 
-watch(content, debounce((newContent) => {
-  parseHtml(newContent)
-}, 250), {
-  immediate: true
-})
+watch(
+  content,
+  debounce((newContent) => {
+    parseHtml(newContent)
+  }, 250),
+  {
+    immediate: true
+  }
+)
 
 // lifecycle hooks
 
@@ -81,7 +87,7 @@ async function handleClick(): Promise<void> {
     html: html.value
   }
   await posts.createPost(newPost)
-  router.push("/")
+  router.push('/')
 }
 </script>
 
