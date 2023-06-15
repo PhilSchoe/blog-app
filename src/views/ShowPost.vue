@@ -15,11 +15,11 @@ if (!post) {
 
 <template>
   <div class="columns">
-    <div class="columns"></div>
-    <div class="columns is-two-thirds">
+    <div class="column"></div>
+    <div class="column is-two-thirds">
       <h1>{{ post.title }}</h1>
       <div v-html="post.html" />
     </div>
-    <div class="columns"></div>
+    <div class="column"></div>
   </div>
 </template>
