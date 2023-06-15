@@ -24,6 +24,19 @@ app.post<{}, {}, Post>('/posts', (req, res) => {
   res.json(post)
 })
 
+app.put<{}, {}, Post>('/posts', (req, res) => {
+  // Add check if user is authenticated
+  // Compare allUsers with AuthorId ?
+
+  const index = allPosts.findIndex((post) => post.id === req.body.id)
+  if (index === -1) {
+    throw Error(`Post with id ${req.body.id} was not found!`)
+  }
+
+  allPosts[index] = req.body
+  res.json(allPosts[index])
+})
+
 const SECRET = 'my-secret'
 const COOKIE = 'vuejs-jwt'
 

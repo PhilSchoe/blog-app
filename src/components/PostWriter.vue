@@ -15,6 +15,12 @@ const props = defineProps<{
   post: TimelinePost | Post
 }>()
 
+// emits
+
+const emit = defineEmits<{
+  (event: 'submit', post: Post): void
+}>()
+
 // variables
 
 const title = ref(props.post.title)
@@ -99,8 +105,8 @@ async function handleClick(): Promise<void> {
     markdown: content.value,
     html: html.value
   }
-  await posts.createPost(newPost)
-  router.push('/')
+
+  emit('submit', newPost)
 }
 </script>
 
