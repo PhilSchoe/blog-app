@@ -7,6 +7,7 @@ import { markedHighlight } from 'marked-highlight'
 import highlightjs from 'highlight.js'
 import debounce from 'lodash/debounce'
 import { usePosts } from '../stores/posts'
+import { useUsers } from '@/stores/users'
 
 // props
 
@@ -23,6 +24,7 @@ const contentEditable = ref<HTMLDivElement>()
 
 const posts = usePosts()
 const router = useRouter()
+const usersStore = useUsers()
 
 /*
 watchEffect( () => {
@@ -80,9 +82,20 @@ function handleInput(): void {
 }
 
 async function handleClick(): Promise<void> {
-  const newPost: TimelinePost = {
+  if (!usersStore.currentUserId) {
+    throw Error('User was not found')
+  }
+
+  if (!props.post.created) {
+    throw Error('Created DateTime missing')
+  }
+
+  const newPost: Post = {
     ...props.post,
+    created:
+      typeof props.post.created === 'string' ? props.post.created : props.post.created.toISO(),
     title: title.value,
+    authorId: usersStore.currentUserId,
     markdown: content.value,
     html: html.value
   }
