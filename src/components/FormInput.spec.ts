@@ -4,7 +4,7 @@ import FormInput from './FormInput.vue'
 import { computed, defineComponent, ref } from 'vue'
 
 describe('FormInput', () => {
-  it.only('tests validation', async () => {
+  it('tests validation', async () => {
     const Parent = defineComponent({
       components: { FormInput },
       template: `
@@ -37,6 +37,12 @@ describe('FormInput', () => {
     })
 
     const wrapper = mount(Parent)
+
+    expect(wrapper.find('.is-danger').text()).toBe('error')
+
+    await wrapper.find('input').setValue('foobar')
+
+    expect(wrapper.find('.is-danger').exists()).toBe(false)
   })
 
   it('renders some errors', () => {
