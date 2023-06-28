@@ -1,10 +1,17 @@
 import { mount } from '@vue/test-utils'
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import Navbar from './Navbar.vue'
 import { createPinia, setActivePinia, type Pinia } from 'pinia'
 import { createMemoryHistory, createRouter, type Router } from 'vue-router'
 import { routes } from '@/router'
 import { useUsers } from '@/stores/users'
+
+vi.stubGlobal(
+  'fetch',
+  vi.fn(() => {
+    // ....
+  })
+)
 
 describe('Navbar', () => {
   let pinia: Pinia
@@ -47,5 +54,10 @@ describe('Navbar', () => {
 
     expect(wrapper.find('a').text()).toBe('New Post')
     expect(wrapper.find('button').text()).toBe('Log Out')
+
+    await wrapper.find('[data-testid="logout"]').trigger('click')
+
+    expect(wrapper.find('#sign-up').exists()).toBe(true)
+    expect(wrapper.find('[data-testid="sign-in"]').exists()).toBe(true)
   })
 })
