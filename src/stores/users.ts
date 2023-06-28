@@ -6,7 +6,7 @@ interface UsersState {
 }
 
 export const useUsers = defineStore('users', {
-  state: () => ({
+  state: (): UsersState => ({
     currentUserId: undefined
   }),
 
