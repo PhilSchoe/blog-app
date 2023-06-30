@@ -1,10 +1,10 @@
 import { mount } from '@vue/test-utils'
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import Navbar from './Navbar.vue'
+import Navbar from '../Navbar.vue'
 import { createPinia, setActivePinia, type Pinia } from 'pinia'
 import { createMemoryHistory, createRouter, type Router } from 'vue-router'
-import { routes } from '@/router'
-import { useUsers } from '@/stores/users'
+import { routes } from '../../router'
+import { useUsers } from '../../stores/users'
 
 vi.stubGlobal(
   'fetch',
