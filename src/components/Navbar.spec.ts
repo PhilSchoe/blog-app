@@ -59,5 +59,8 @@ describe('Navbar', () => {
 
     expect(wrapper.find('#sign-up').exists()).toBe(true)
     expect(wrapper.find('[data-testid="sign-in"]').exists()).toBe(true)
+
+    await wrapper.find('[data-testid="sign-in"]').trigger('click')
+    expect(document.body.querySelector('[data-testid="signin-form"]')).toBeTruthy()
   })
 })
