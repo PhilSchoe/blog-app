@@ -122,7 +122,12 @@ async function handleClick(): Promise<void> {
 
   <div class="columns">
     <div class="column">
-      <div contenteditable ref="contentEditable" @input="handleInput" />
+      <div
+        contenteditable
+        data-testid="contenteditable"
+        ref="contentEditable"
+        @input="handleInput"
+      />
     </div>
     <div class="column">
       <div v-html="html" />
@@ -131,7 +136,11 @@ async function handleClick(): Promise<void> {
 
   <div class="columns">
     <div class="column">
-      <button class="button is-primary is-pulled-right" @click.prevent="handleClick">
+      <button
+        data-testid="submit"
+        class="button is-primary is-pulled-right"
+        @click.prevent="handleClick"
+      >
         Save Post
       </button>
     </div>
