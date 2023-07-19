@@ -33,6 +33,16 @@ describe('FormInput', () => {
           formValue,
           status
         }
+        /*
+        return () => (
+          <FormInput
+            name="foo"
+            type="input"
+            status={'status.value'}
+            modelValue={'formValue.value'}
+          />
+        )
+        */
       }
     })
 
